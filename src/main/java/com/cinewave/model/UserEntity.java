@@ -1,5 +1,6 @@
 package com.cinewave.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,6 +36,7 @@ public class UserEntity {
   private String email;
 
   @Column(name = "password", nullable = false)
+  @JsonIgnore
   private String password;
 
   @Column(name = "mobile", nullable = false)
