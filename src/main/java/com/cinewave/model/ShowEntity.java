@@ -27,7 +27,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "shows")
+//@Table(name = "shows")
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
