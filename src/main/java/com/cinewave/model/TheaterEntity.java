@@ -23,10 +23,10 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@Entity
+//@Entity
 @Table(name = "theaters")
 @NoArgsConstructor
-//@Builder
+@Builder
 @AllArgsConstructor
 @ToString
 public class TheaterEntity {
@@ -50,11 +50,11 @@ public class TheaterEntity {
 
   @OneToMany(mappedBy = "theater", cascade = CascadeType.ALL)
   @JsonIgnore
-//  @Builder.Default
+  @Builder.Default
   private List<ShowEntity> shows = new ArrayList<>();
 
   @OneToMany(mappedBy = "theater", cascade = CascadeType.ALL)
   @JsonIgnore
-//  @Builder.Default
+  @Builder.Default
   private List<TheaterSeatsEntity> seats = new ArrayList<>();
 }

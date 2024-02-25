@@ -1,4 +1,4 @@
-package com.cinewave.jwtconnect;
+package com.cinewave.jwtmodels;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +13,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-public class JwtRequest 
-{
-	private String email;
-	private String password;
+public class JwtResponse {
+
+  private String jwtToken;
+  private String email;
 }

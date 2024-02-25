@@ -1,5 +1,10 @@
 package com.cinewave.controllers;
 
+import com.cinewave.jwtmodels.JwtRequest;
+import com.cinewave.jwtmodels.JwtResponse;
+import com.cinewave.model.UserEntity;
+import com.cinewave.security.JwtHelper;
+import com.cinewave.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,68 +21,61 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cinewave.jwtconnect.JwtRequest;
-import com.cinewave.jwtconnect.JwtResponse;
-import com.cinewave.model.UserEntity;
-import com.cinewave.security.JwtHelper;
-import com.cinewave.services.UserService;
-
 @RestController
 @RequestMapping("/auth")
-public class AuthController 
-{
-	@Autowired
-    private UserDetailsService userDetailsService;
+public class AuthController {
 
-    @Autowired
-    private AuthenticationManager manager;
+  @Autowired
+  private UserDetailsService userDetailsService;
 
+  @Autowired
+  private AuthenticationManager manager;
 
-    @Autowired
-    private JwtHelper helper;
-    
-    @Autowired
-    private UserService userService;
+  @Autowired
+  private JwtHelper helper;
 
-    @SuppressWarnings("unused")
-    private Logger logger = LoggerFactory.getLogger(AuthController.class);
-    
-    @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
+  @Autowired
+  private UserService userService;
 
-        this.doAuthenticate(request.getEmail(), request.getPassword());
+  @SuppressWarnings("unused")
+  private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
+  @PostMapping("/login")
+  public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
+    this.doAuthenticate(request.getEmail(), request.getPassword());
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-        String token = this.helper.generateToken(userDetails);
+    UserDetails userDetails = userDetailsService.loadUserByUsername(
+      request.getEmail()
+    );
+    String token = this.helper.generateToken(userDetails);
 
-        JwtResponse response = JwtResponse.builder()
-                .jwtToken(token)
-                .username(userDetails.getUsername()).build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    JwtResponse response = JwtResponse
+      .builder()
+      .jwtToken(token)
+      .email(userDetails.getUsername())
+      .build();
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
+
+  private void doAuthenticate(String email, String password) {
+    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+      email,
+      password
+    );
+    try {
+      manager.authenticate(authentication);
+    } catch (BadCredentialsException e) {
+      throw new BadCredentialsException(" Invalid Username or Password  !!");
     }
-    
-    private void doAuthenticate(String email, String password) {
+  }
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
-        try {
-            manager.authenticate(authentication);
+  @ExceptionHandler(BadCredentialsException.class)
+  public String exceptionHandler() {
+    return "Credentials Invalid !!";
+  }
 
-
-        } catch (BadCredentialsException e) {
-            throw new BadCredentialsException(" Invalid Username or Password  !!");
-        }
-
-    }
-
-    @ExceptionHandler(BadCredentialsException.class)
-    public String exceptionHandler() {
-        return "Credentials Invalid !!";
-    }
-    
-    @PostMapping("/create-user")
-    public UserEntity createUser(@RequestBody UserEntity user)
-    {
-    	return userService.createUser(user);
-    }
+  @PostMapping("/create-user")
+  public UserEntity createUser(@RequestBody UserEntity user) {
+    return userService.createUser(user);
+  }
 }

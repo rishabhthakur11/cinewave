@@ -1,12 +1,10 @@
 package com.cinewave.repositories;
 
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.cinewave.model.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository extends JpaRepository<UserEntity, Integer>
-{
-	public Optional<UserEntity> findByEmail(String email);
+@Repository
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+  public UserEntity findByEmail(String email);
 }

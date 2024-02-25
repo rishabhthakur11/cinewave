@@ -25,8 +25,8 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@Entity
-//@Table(name = "movies")
+//@Entity
+@Table(name = "movies")
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor

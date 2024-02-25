@@ -15,6 +15,7 @@ import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,11 +24,12 @@ import org.springframework.data.annotation.CreatedDate;
 
 @Getter
 @Setter
-@Entity
+//@Entity
 @Table(name = "ticket")
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class TicketEntity {
 
   @Id
